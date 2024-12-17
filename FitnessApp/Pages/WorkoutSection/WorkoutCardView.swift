@@ -1,9 +1,3 @@
-//
-//  WorkoutCardView.swift
-//  FitnessApp
-//
-//  Created by Almaz Beisenov on 15.12.2024.
-//
 import SwiftUI
 
 struct WorkoutCardView: View {
@@ -13,18 +7,20 @@ struct WorkoutCardView: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 8) {
+                // Название тренировки
                 Text(workout.name ?? "Без названия")
                     .font(.headline)
-                    .foregroundColor(.black)
+                    .foregroundColor(.primary)
 
+                // Детали тренировки в зависимости от типа
                 if workout.type == "Силовая" {
                     Text("Вес: \(workout.weight, specifier: "%.1f") кг | Сеты: \(workout.sets) | Повторения: \(workout.reps)")
                         .font(.subheadline)
-                        .foregroundColor(.gray)
+                        .foregroundColor(.secondary)
                 } else if workout.type == "Кардио" {
-                    Text("Дистанция: \(workout.distance, specifier: "%.1f") км | Время: \(workout.time) мин")
+                    Text("Дистанция: \(workout.distance, specifier: "%.2f") км | Время: \(formattedTime(Int(workout.time)))")
                         .font(.subheadline)
-                        .foregroundColor(.gray)
+                        .foregroundColor(.secondary)
                 }
             }
 
@@ -36,28 +32,30 @@ struct WorkoutCardView: View {
                     toggleCompletion()
                 }
             }) {
-                VStack {
+                VStack(spacing: 5) {
                     Image(systemName: workout.completed ? "checkmark.circle.fill" : "circle")
                         .resizable()
                         .frame(width: 30, height: 30)
                         .foregroundColor(workout.completed ? .green : .gray)
 
-                    if workout.completed {
-                        Text("Сделано")
-                            .font(.caption)
-                            .foregroundColor(.green)
-                    } else {
-                        Text("Не сделано")
-                            .font(.caption)
-                            .foregroundColor(.gray)
-                    }
+                    Text(workout.completed ? "Сделано" : "Не сделано")
+                        .font(.caption)
+                        .foregroundColor(workout.completed ? .green : .gray)
                 }
             }
         }
         .padding()
-        .background(workout.completed ? Color.green.opacity(0.2) : Color.white)
-        .cornerRadius(10)
+        .background(workout.completed ? Color.green.opacity(0.1) : Color.white)
+        .cornerRadius(12)
         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
         .animation(.easeInOut, value: workout.completed)
     }
+
+    // Форматирование времени (секунды в формат MM:SS)
+    private func formattedTime(_ time: Int) -> String {
+        let minutes = time / 60
+        let seconds = time % 60
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
 }
+
