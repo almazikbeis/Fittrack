@@ -322,7 +322,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				"INFOPLIST_FILE[sdk=*]" = "FitnessApp/Info.plist\nFitnessApp/Info.plist\n";
-				INFOPLIST_KEY_NSHealthClinicalHealthRecordsShareUsageDescription = Yes;
+				INFOPLIST_KEY_NSHealthClinicalHealthRecordsShareUsageDescription = "Приложение может читать клинические записи для персонализации рекомендаций.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
@@ -382,7 +382,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				"INFOPLIST_FILE[sdk=*]" = "FitnessApp/Info.plist\n";
-				INFOPLIST_KEY_NSHealthClinicalHealthRecordsShareUsageDescription = Yes;
+				INFOPLIST_KEY_NSHealthClinicalHealthRecordsShareUsageDescription = "Приложение может читать клинические записи для персонализации рекомендаций.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
@@ -408,9 +408,11 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "FitnessApp/Info.plist\n";
 				"INFOPLIST_FILE[sdk=*]" = "FitnessApp/Info.plist\n";
-				INFOPLIST_KEY_NSHealthClinicalHealthRecordsShareUsageDescription = Yes;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Сканируйте блюда камерой для автоматического расчёта КБЖУ.";
+				INFOPLIST_KEY_NSHealthClinicalHealthRecordsShareUsageDescription = "Приложение может читать клинические записи для персонализации рекомендаций.";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Приложение использует данные HealthKit для отслеживания вашей активности: шаги, калории, этажи и пульс.\n";
-				INFOPLIST_KEY_NSHealthUpdateUsageDescription = Yes;
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Приложение записывает тренировки в HealthKit для синхронизации с Apple Health.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Выбирайте фото еды из галереи для расчёта КБЖУ.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -442,9 +444,11 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "FitnessApp/Info.plist\n";
-				INFOPLIST_KEY_NSHealthClinicalHealthRecordsShareUsageDescription = Yes;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Сканируйте блюда камерой для автоматического расчёта КБЖУ.";
+				INFOPLIST_KEY_NSHealthClinicalHealthRecordsShareUsageDescription = "Приложение может читать клинические записи для персонализации рекомендаций.";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Приложение использует данные HealthKit для отслеживания вашей активности: шаги, калории, этажи и пульс.\n";
-				INFOPLIST_KEY_NSHealthUpdateUsageDescription = Yes;
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Приложение записывает тренировки в HealthKit для синхронизации с Apple Health.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Выбирайте фото еды из галереи для расчёта КБЖУ.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

@@ -2,8 +2,7 @@
 //  AddWorkoutView.swift
 //  FitnessApp
 //
-//  Created by Almaz Beisenov on 15.12.2024.
-//
+
 import SwiftUI
 
 struct AddWorkoutView: View {
@@ -18,6 +17,7 @@ struct AddWorkoutView: View {
     @State private var distance: Int = 5
     @State private var time: Int = 30
     @State private var date: Date
+    @State private var notes = ""
 
     let workoutTypes = ["Силовая", "Кардио"]
 
@@ -28,120 +28,287 @@ struct AddWorkoutView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color(.systemGray6) // Фон
-                    .ignoresSafeArea()
+                Color(.systemGroupedBackground).ignoresSafeArea()
 
-                VStack(spacing: 20) {
-                    // Заголовок
-                    Text("Добавить тренировку")
-                        .font(.largeTitle)
-                        .bold()
-                        .foregroundColor(.green)
-                        .transition(.slide)
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 20) {
+                        // Type selector
+                        typeSelectorSection
 
-                    Form {
-                        Section(header: Text("Информация").foregroundColor(.green)) {
-                            TextField("Название тренировки", text: $name)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                        // Name
+                        nameSection
 
-                            Picker("Тип тренировки", selection: $type) {
-                                ForEach(workoutTypes, id: \.self) { workoutType in
-                                    Text(workoutType)
-                                }
-                            }
-                            .pickerStyle(SegmentedPickerStyle())
-                            .transition(.opacity)
-                        }
-
+                        // Parameters
                         if type == "Силовая" {
-                            Section(header: Text("Силовая тренировка").foregroundColor(.green)) {
-                                animatedPicker(label: "Вес:", value: $weight, range: 1...1000, unit: "кг")
-                                animatedPicker(label: "Сеты:", value: $sets, range: 1...20, unit: "")
-                                animatedPicker(label: "Повторения:", value: $reps, range: 1...50, unit: "")
-                            }
-                        } else if type == "Кардио" {
-                            Section(header: Text("Кардио тренировка").foregroundColor(.green)) {
-                                Stepper("Дистанция: \(distance) км", value: $distance, in: 1...100)
-                                Stepper("Время: \(time) мин", value: $time, in: 1...300)
-                            }
+                            strengthSection
+                                .transition(.asymmetric(
+                                    insertion: .move(edge: .trailing).combined(with: .opacity),
+                                    removal: .move(edge: .leading).combined(with: .opacity)
+                                ))
+                        } else {
+                            cardioSection
+                                .transition(.asymmetric(
+                                    insertion: .move(edge: .trailing).combined(with: .opacity),
+                                    removal: .move(edge: .leading).combined(with: .opacity)
+                                ))
                         }
 
-                        Section(header: Text("Дата").foregroundColor(.green)) {
-                            DatePicker("Дата", selection: $date, displayedComponents: .date)
-                        }
-                    }
-                    .background(Color.white)
-                    .cornerRadius(15)
-                    .shadow(color: .gray.opacity(0.2), radius: 5, x: 0, y: 5)
+                        // Notes
+                        notesSection
 
-                    // Кнопки
-                    HStack {
-                        Button(action: { presentationMode.wrappedValue.dismiss() }) {
-                            Text("Отмена")
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.gray.opacity(0.2))
-                                .cornerRadius(10)
-                        }
+                        // Date picker
+                        dateSection
 
+                        // Save button
                         Button(action: saveWorkout) {
-                            Text("Сохранить")
+                            Text("Добавить тренировку")
+                                .font(.headline)
+                                .fontWeight(.semibold)
                                 .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.green)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                                .shadow(color: Color.green.opacity(0.3), radius: 5, x: 0, y: 5)
+                                .padding(.vertical, 16)
+                                .background(
+                                    Group {
+                                        if name.isEmpty {
+                                            RoundedRectangle(cornerRadius: 16).fill(Color(.systemGray4))
+                                        } else {
+                                            RoundedRectangle(cornerRadius: 16).fill(LinearGradient.primaryGradient)
+                                        }
+                                    }
+                                )
+                                .foregroundColor(name.isEmpty ? .secondary : .white)
+                                .shadow(color: name.isEmpty ? .clear : Color.primaryGreen.opacity(0.35), radius: 10, x: 0, y: 4)
                         }
+                        .disabled(name.isEmpty)
+                        .padding(.horizontal, 20)
+                        .padding(.bottom, 40)
                     }
-                    .padding(.horizontal)
-                    .transition(.opacity)
+                    .padding(.top, 20)
                 }
-                .padding()
             }
-            .navigationBarHidden(true)
+            .navigationTitle("Новая тренировка")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Отмена") {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                    .foregroundColor(.secondary)
+                }
+            }
+            .animation(.easeInOut(duration: 0.25), value: type)
         }
-        .animation(.easeInOut, value: type)
     }
 
-    private func animatedPicker(label: String, value: Binding<Int>, range: ClosedRange<Int>, unit: String) -> some View {
-        HStack {
-            Text(label)
-                .font(.headline)
-                .foregroundColor(.green)
-            Spacer()
-            Picker("", selection: value) {
-                ForEach(range, id: \.self) { i in
-                    Text("\(i) \(unit)")
+    // MARK: - Type Selector
+
+    private var typeSelectorSection: some View {
+        HStack(spacing: 10) {
+            ForEach(workoutTypes, id: \.self) { workoutType in
+                Button(action: {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                        type = workoutType
+                    }
+                }) {
+                    VStack(spacing: 8) {
+                        Image(systemName: workoutType == "Силовая" ? "dumbbell.fill" : "figure.run")
+                            .font(.system(size: 24, weight: .medium))
+                        Text(workoutType)
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                    }
+                    .foregroundColor(type == workoutType ? .white : .secondary)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 18)
+                    .background(
+                        Group {
+                            if type == workoutType && workoutType == "Силовая" {
+                                RoundedRectangle(cornerRadius: 16).fill(LinearGradient.strengthGradient)
+                            } else if type == workoutType && workoutType == "Кардио" {
+                                RoundedRectangle(cornerRadius: 16).fill(LinearGradient.cardioGradient)
+                            } else {
+                                RoundedRectangle(cornerRadius: 16).fill(Color(.systemBackground))
+                            }
+                        }
+                    )
+                    .shadow(
+                        color: type == workoutType
+                            ? (workoutType == "Силовая" ? Color.strengthPurple.opacity(0.3) : Color.cardioOrange.opacity(0.3))
+                            : .black.opacity(0.05),
+                        radius: 8, x: 0, y: 3
+                    )
                 }
+                .buttonStyle(ScaleButtonStyle())
             }
-            .pickerStyle(WheelPickerStyle())
-            .frame(width: 120, height: 120)
-            .clipped()
+        }
+        .padding(.horizontal, 20)
+    }
+
+    // MARK: - Name Section
+
+    private var nameSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Label("Название", systemImage: "text.cursor")
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundColor(.secondary)
+                .padding(.horizontal, 20)
+
+            TextField(type == "Силовая" ? "Например: Жим лёжа" : "Например: Утренняя пробежка", text: $name)
+                .font(.body)
+                .padding(16)
+                .background(Color(.systemBackground))
+                .cornerRadius(14)
+                .shadow(color: .black.opacity(0.05), radius: 6, x: 0, y: 2)
+                .padding(.horizontal, 20)
         }
     }
+
+    // MARK: - Strength Section
+
+    private var strengthSection: some View {
+        VStack(spacing: 12) {
+            parameterCard(
+                title: "Вес", value: "\(weight) кг",
+                icon: "scalemass.fill", color: .strengthPurple,
+                stepper: Stepper("", value: $weight, in: 1...500).labelsHidden()
+            )
+            parameterCard(
+                title: "Подходы", value: "\(sets)",
+                icon: "repeat", color: .blue,
+                stepper: Stepper("", value: $sets, in: 1...20).labelsHidden()
+            )
+            parameterCard(
+                title: "Повторения", value: "\(reps)",
+                icon: "arrow.clockwise", color: .orange,
+                stepper: Stepper("", value: $reps, in: 1...100).labelsHidden()
+            )
+        }
+        .padding(.horizontal, 20)
+    }
+
+    // MARK: - Cardio Section
+
+    private var cardioSection: some View {
+        VStack(spacing: 12) {
+            parameterCard(
+                title: "Дистанция", value: "\(distance) км",
+                icon: "location.fill", color: .cardioOrange,
+                stepper: Stepper("", value: $distance, in: 1...100).labelsHidden()
+            )
+            parameterCard(
+                title: "Время", value: "\(time) мин",
+                icon: "clock.fill", color: .cardioRed,
+                stepper: Stepper("", value: $time, in: 1...300).labelsHidden()
+            )
+        }
+        .padding(.horizontal, 20)
+    }
+
+    // MARK: - Notes Section
+
+    private var notesSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Label("Заметки", systemImage: "note.text")
+                .font(.subheadline).fontWeight(.medium).foregroundColor(.secondary)
+                .padding(.horizontal, 20)
+
+            ZStack(alignment: .topLeading) {
+                if notes.isEmpty {
+                    Text("Как прошла тренировка?")
+                        .foregroundColor(.secondary.opacity(0.6))
+                        .font(.body)
+                        .padding(.top, 18)
+                        .padding(.leading, 20)
+                }
+                TextEditor(text: $notes)
+                    .font(.body)
+                    .frame(minHeight: 80)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .scrollContentBackground(.hidden)
+            }
+            .background(Color(.systemBackground))
+            .cornerRadius(14)
+            .shadow(color: .black.opacity(0.05), radius: 6, x: 0, y: 2)
+            .padding(.horizontal, 20)
+        }
+    }
+
+    // MARK: - Date Section
+
+    private var dateSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Label("Дата", systemImage: "calendar")
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundColor(.secondary)
+                .padding(.horizontal, 20)
+
+            HStack {
+                DatePicker("", selection: $date, displayedComponents: .date)
+                    .datePickerStyle(.compact)
+                    .labelsHidden()
+                Spacer()
+            }
+            .padding(16)
+            .background(Color(.systemBackground))
+            .cornerRadius(14)
+            .shadow(color: .black.opacity(0.05), radius: 6, x: 0, y: 2)
+            .padding(.horizontal, 20)
+        }
+    }
+
+    // MARK: - Parameter Card Builder
+
+    private func parameterCard(title: String, value: String, icon: String, color: Color, stepper: some View) -> some View {
+        HStack(spacing: 14) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(color.opacity(0.12))
+                    .frame(width: 38, height: 38)
+                Image(systemName: icon)
+                    .font(.system(size: 16))
+                    .foregroundColor(color)
+            }
+
+            Text(title)
+                .font(.body)
+                .fontWeight(.medium)
+
+            Spacer()
+
+            Text(value)
+                .font(.title3)
+                .fontWeight(.semibold)
+                .foregroundColor(.primary)
+
+            stepper
+        }
+        .padding(16)
+        .background(Color(.systemBackground))
+        .cornerRadius(14)
+        .shadow(color: .black.opacity(0.05), radius: 6, x: 0, y: 2)
+    }
+
+    // MARK: - Save
 
     private func saveWorkout() {
+        guard !name.isEmpty else { return }
         let newWorkout = Workout(context: viewContext)
         newWorkout.id = UUID()
         newWorkout.name = name
         newWorkout.type = type
         newWorkout.date = date
-
         if type == "Силовая" {
             newWorkout.weight = Double(weight)
             newWorkout.sets = Int16(sets)
             newWorkout.reps = Int16(reps)
-        } else if type == "Кардио" {
+        } else {
             newWorkout.distance = Double(distance)
             newWorkout.time = Int16(time)
         }
-
-        do {
-            try viewContext.save()
-            presentationMode.wrappedValue.dismiss()
-        } catch {
-            print("Ошибка сохранения: \(error)")
-        }
+        newWorkout.notes = notes.isEmpty ? nil : notes
+        try? viewContext.save()
+        presentationMode.wrappedValue.dismiss()
     }
 }

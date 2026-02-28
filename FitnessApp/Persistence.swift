@@ -2,8 +2,6 @@
 //  Persistence.swift
 //  FitnessApp
 //
-//  Created by Almaz Beisenov on 15.12.2024.
-//
 
 import CoreData
 
@@ -14,30 +12,41 @@ struct PersistenceController {
 
     init(inMemory: Bool = false) {
         container = NSPersistentContainer(name: "FitnessApp")
+
         if inMemory {
             container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
         }
-        container.loadPersistentStores { description, error in
+
+        if let description = container.persistentStoreDescriptions.first {
+            description.shouldMigrateStoreAutomatically  = true
+            description.shouldInferMappingModelAutomatically = true
+        }
+
+        let coordinator = container.persistentStoreCoordinator
+        container.loadPersistentStores { storeDescription, error in
             if let error = error as NSError? {
-                fatalError("Ошибка при загрузке хранилища: \(error), \(error.userInfo)")
+                // Migration failed — destroy old store and start fresh
+                if let storeURL = storeDescription.url {
+                    try? coordinator.destroyPersistentStore(
+                        at: storeURL, ofType: NSSQLiteStoreType, options: nil)
+                    try? coordinator.addPersistentStore(
+                        ofType: NSSQLiteStoreType, configurationName: nil,
+                        at: storeURL, options: nil)
+                }
+                print("⚠️ CoreData migration failed, store reset: \(error)")
             }
         }
+        container.viewContext.automaticallyMergesChangesFromParent = true
+        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
     }
 
     var viewContext: NSManagedObjectContext {
-        return container.viewContext
+        container.viewContext
     }
 
-    // Сохранение контекста с обработкой ошибок
-    func saveContext() {
-        let context = container.viewContext
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                let nserror = error as NSError
-                fatalError("Ошибка сохранения контекста: \(nserror), \(nserror.userInfo)")
-            }
-        }
+    func save() {
+        let ctx = container.viewContext
+        guard ctx.hasChanges else { return }
+        try? ctx.save()
     }
 }

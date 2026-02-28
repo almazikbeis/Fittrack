@@ -15,6 +15,6 @@ struct FitnessAppApp: App {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
-        }
+            }
     }
 }

@@ -2,8 +2,7 @@
 //  AnalyticsView.swift
 //  FitnessApp
 //
-//  Created by Almaz Beisenov on 16.12.2024.
-//
+
 import SwiftUI
 import Charts
 
@@ -11,125 +10,243 @@ struct AnalyticsView: View {
     @State private var stepsData: [Double] = []
     @State private var caloriesData: [Double] = []
     @State private var distanceData: [Double] = []
+    @State private var flightsData: [Double] = []
     @State private var isLoading = true
 
     var body: some View {
-        NavigationView {
-            ScrollView {
-                VStack(spacing: 20) {
-                    if isLoading {
-                        ProgressView("Загрузка данных...")
-                            .padding(.top, 50)
-                    } else {
-                        Text("Аналитика за последние 30 дней")
-                            .font(.largeTitle)
-                            .bold()
-                            .foregroundColor(.green)
-                            .padding(.top)
+        ZStack {
+            Color(.systemGroupedBackground).ignoresSafeArea()
 
-                        // Карточка с шагами + линейный график
-                        analyticsCard(
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    // Header
+                    headerSection
+
+                    if isLoading {
+                        loadingView
+                    } else {
+                        // Summary grid
+                        summaryGrid
+                            .padding(.horizontal)
+
+                        // Charts
+                        chartCard(
                             title: "Шаги",
-                            data: stepsData,
+                            subtitle: "Среднее за день: \(Int(stepsData.average))",
+                            icon: "figure.walk",
+                            color: .blue,
                             chartView: LineChartView(data: stepsData.map { Int($0) }, color: .blue, title: "Шаги")
                         )
+                        .padding(.horizontal)
 
-                        // Карточка с калориями + столбчатый график
-                        analyticsCard(
+                        chartCard(
                             title: "Калории",
-                            data: caloriesData,
+                            subtitle: "Среднее за день: \(Int(caloriesData.average)) ккал",
+                            icon: "flame.fill",
+                            color: .orange,
                             chartView: BarChartView(data: caloriesData.map { Int($0) }, color: .orange, title: "Калории")
                         )
+                        .padding(.horizontal)
 
-                        // Карточка с дистанцией + линейный график
-                        analyticsCard(
+                        chartCard(
                             title: "Дистанция",
-                            data: distanceData,
+                            subtitle: "Среднее за день: \(String(format: "%.2f", distanceData.average / 1000)) км",
+                            icon: "location.fill",
+                            color: .purple,
                             chartView: LineChartView(data: distanceData.map { Int($0) }, color: .purple, title: "Дистанция")
                         )
-                        // Карточка с этажами + столбчатый график
-                        analyticsCard(
+                        .padding(.horizontal)
+
+                        chartCard(
                             title: "Этажи",
-                            data: flightsData,
+                            subtitle: "Среднее за день: \(Int(flightsData.average))",
+                            icon: "stairs",
+                            color: .pink,
                             chartView: BarChartView(data: flightsData.map { Int($0) }, color: .pink, title: "Этажи")
                         )
-
+                        .padding(.horizontal)
                     }
+
+                    Spacer().frame(height: 110)
                 }
-                .padding(.horizontal)
             }
-            .onAppear {
-                loadData()
-            }
+        }
+        .onAppear { loadData() }
+    }
+
+    // MARK: - Header
+
+    private var headerSection: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("Аналитика")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+            Text("Последние 30 дней")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal)
+        .padding(.top, 60)
+    }
+
+    // MARK: - Loading
+
+    private var loadingView: some View {
+        VStack(spacing: 16) {
+            ProgressView()
+                .scaleEffect(1.4)
+                .tint(.primaryGreen)
+            Text("Загрузка данных...")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(60)
+    }
+
+    // MARK: - Summary Grid
+
+    private var summaryGrid: some View {
+        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+            summaryCard(
+                title: "Шаги",
+                value: formatNumber(Int(stepsData.reduce(0, +))),
+                unit: "всего",
+                icon: "figure.walk",
+                color: .blue
+            )
+            summaryCard(
+                title: "Калории",
+                value: formatNumber(Int(caloriesData.reduce(0, +))),
+                unit: "ккал сожжено",
+                icon: "flame.fill",
+                color: .orange
+            )
+            summaryCard(
+                title: "Дистанция",
+                value: String(format: "%.0f", distanceData.reduce(0, +) / 1000),
+                unit: "км пройдено",
+                icon: "location.fill",
+                color: .purple
+            )
+            summaryCard(
+                title: "Этажи",
+                value: "\(Int(flightsData.reduce(0, +)))",
+                unit: "этажей",
+                icon: "stairs",
+                color: .pink
+            )
         }
     }
 
-    // Карточка для аналитики
-    private func analyticsCard(title: String, data: [Double], chartView: some View) -> some View {
-        VStack(alignment: .leading, spacing: 15) {
+    private func summaryCard(title: String, value: String, unit: String, icon: String, color: Color) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Text(title)
-                    .font(.headline)
-                    .foregroundColor(.green)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(color.opacity(0.15))
+                        .frame(width: 32, height: 32)
+                    Image(systemName: icon)
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(color)
+                }
                 Spacer()
-                Text("Среднее: \(Int(data.average))")
-                    .font(.title3)
-                    .bold()
             }
-            chartView
-                .frame(height: 200)
+            Text(value)
+                .font(.title2)
+                .fontWeight(.bold)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundColor(.primary)
+                Text(unit)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
         }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(15)
-        .shadow(color: .gray.opacity(0.3), radius: 5, x: 0, y: 5)
+        .padding(16)
+        .background(Color(.systemBackground))
+        .cornerRadius(18)
+        .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 3)
     }
 
-    // Загрузка данных
-    @State private var flightsData: [Double] = []
+    // MARK: - Chart Card
+
+    private func chartCard(title: String, subtitle: String, icon: String, color: Color, chartView: some View) -> some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(spacing: 12) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(color.opacity(0.12))
+                        .frame(width: 40, height: 40)
+                    Image(systemName: icon)
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(color)
+                }
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                    Text(subtitle)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                Spacer()
+            }
+
+            chartView
+                .frame(height: 180)
+        }
+        .padding(18)
+        .background(Color(.systemBackground))
+        .cornerRadius(22)
+        .shadow(color: .black.opacity(0.06), radius: 10, x: 0, y: 4)
+    }
+
+    // MARK: - Helpers
+
+    private func formatNumber(_ n: Int) -> String {
+        if n >= 1000 { return String(format: "%.1fk", Double(n) / 1000) }
+        return "\(n)"
+    }
 
     private func loadData() {
         isLoading = true
+        let group = DispatchGroup()
 
-        let dispatchGroup = DispatchGroup()
-
-        dispatchGroup.enter()
+        group.enter()
         HealthManager.shared.fetchStepsForLast30Days { steps in
             self.stepsData = steps
-            dispatchGroup.leave()
+            group.leave()
         }
-
-        dispatchGroup.enter()
+        group.enter()
         HealthManager.shared.fetchCaloriesForLast30Days { calories in
             self.caloriesData = calories
-            dispatchGroup.leave()
+            group.leave()
         }
-
-        dispatchGroup.enter()
+        group.enter()
         HealthManager.shared.fetchDistanceForLast30Days { distance in
             self.distanceData = distance
-            dispatchGroup.leave()
+            group.leave()
         }
-
-        dispatchGroup.enter()
+        group.enter()
         HealthManager.shared.fetchFlightsForLast30Days { flights in
             self.flightsData = flights
-            dispatchGroup.leave()
+            group.leave()
         }
 
-        dispatchGroup.notify(queue: .main) {
+        group.notify(queue: .main) {
             self.isLoading = false
         }
     }
-
-        // Добавьте вызовы для калорий, дистанции и этажей
-    
 }
 
 extension Array where Element: BinaryFloatingPoint {
     var average: Double {
         guard !isEmpty else { return 0 }
-        let sum = self.reduce(0, +)
-        return Double(sum) / Double(self.count)
+        return Double(self.reduce(0, +)) / Double(self.count)
     }
 }

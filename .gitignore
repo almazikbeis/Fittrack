@@ -1,0 +1,28 @@
+# Xcode user data
+*.xcuserstate
+xcuserdata/
+*.xcuserdatad/
+
+# Build artifacts
+build/
+DerivedData/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# CocoaPods
+Pods/
+
+# SPM
+.build/
+.swiftpm/
+
+# macOS
+.DS_Store
+*.swp
+
+# Secrets — NEVER commit API keys
+FitnessApp/AppSecrets.swift
+
+# Claude Code session memory
+.claude/
