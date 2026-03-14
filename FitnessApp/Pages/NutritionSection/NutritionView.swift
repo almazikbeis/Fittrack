@@ -59,12 +59,12 @@ struct NutritionView: View {
     @State private var expandedMeals: Set<String> = Set(MealType.allCases.map(\.rawValue))
     @State private var animateRing                = false
 
-    // Daily goals
-    let caloriesGoal: Double = 2000
-    let proteinGoal:  Double = 150
-    let fatGoal:      Double = 65
-    let carbsGoal:    Double = 250
-    let waterGoal              = 8
+    // Daily goals — dynamically read from AppStorage (synced from Supabase via AuthViewModel)
+    @AppStorage("goalCalories") private var caloriesGoal: Int = 2000
+    @AppStorage("goalProtein")  private var proteinGoal:  Int = 150
+    @AppStorage("goalFat")      private var fatGoal:      Int = 65
+    @AppStorage("goalCarbs")    private var carbsGoal:    Int = 250
+    @AppStorage("goalWater")    private var waterGoal:    Int = 8
 
     var body: some View {
         ZStack {
@@ -167,7 +167,7 @@ struct NutritionView: View {
                 Circle().stroke(Color.primaryGreen.opacity(0.12), lineWidth: 14)
                 Circle()
                     .trim(from: 0,
-                          to: animateRing ? CGFloat(min(totalCalories / caloriesGoal, 1.0)) : 0)
+                          to: animateRing ? CGFloat(min(totalCalories / caloriesGoalD, 1.0)) : 0)
                     .stroke(
                         AngularGradient(
                             colors: [.primaryGreen, Color(red: 0.05, green: 0.55, blue: 0.90), .primaryGreen],
@@ -179,7 +179,7 @@ struct NutritionView: View {
                 VStack(spacing: 2) {
                     Text("\(Int(totalCalories))")
                         .font(.system(size: 26, weight: .bold, design: .rounded))
-                    Text("из \(Int(caloriesGoal))")
+                    Text("из \(caloriesGoal)")
                         .font(.caption2).foregroundColor(.secondary)
                     Text("ккал")
                         .font(.caption).foregroundColor(.primaryGreen).fontWeight(.semibold)
@@ -188,10 +188,10 @@ struct NutritionView: View {
             .frame(width: 128, height: 128)
 
             VStack(alignment: .leading, spacing: 12) {
-                nutrientRow(.nutritionPurple, "Белки",  "\(Int(totalProtein))", "/ \(Int(proteinGoal)) г")
-                nutrientRow(.cardioOrange,    "Жиры",   "\(Int(totalFat))",     "/ \(Int(fatGoal)) г")
-                nutrientRow(.nutritionBlue,   "Углев.", "\(Int(totalCarbs))",   "/ \(Int(carbsGoal)) г")
-                let rem = max(caloriesGoal - totalCalories, 0)
+                nutrientRow(.nutritionPurple, "Белки",  "\(Int(totalProtein))", "/ \(proteinGoal) г")
+                nutrientRow(.cardioOrange,    "Жиры",   "\(Int(totalFat))",     "/ \(fatGoal) г")
+                nutrientRow(.nutritionBlue,   "Углев.", "\(Int(totalCarbs))",   "/ \(carbsGoal) г")
+                let rem = max(caloriesGoalD - totalCalories, 0)
                 VStack(alignment: .leading, spacing: 1) {
                     Text("\(Int(rem)) ккал").font(.subheadline).fontWeight(.bold)
                         .foregroundColor(rem > 0 ? .primary : .red)
@@ -223,9 +223,9 @@ struct NutritionView: View {
     private var macroProgressCard: some View {
         VStack(alignment: .leading, spacing: 14) {
             Text("Макронутриенты").font(.headline)
-            macroBar("Белки",    totalProtein, proteinGoal, .nutritionPurple)
-            macroBar("Жиры",     totalFat,     fatGoal,     .cardioOrange)
-            macroBar("Углеводы", totalCarbs,   carbsGoal,   .nutritionBlue)
+            macroBar("Белки",    totalProtein, proteinGoalD, .nutritionPurple)
+            macroBar("Жиры",     totalFat,     fatGoalD,     .cardioOrange)
+            macroBar("Углеводы", totalCarbs,   carbsGoalD,   .nutritionBlue)
         }
         .padding(18)
         .background(Color(.systemBackground)).cornerRadius(22)
@@ -493,6 +493,10 @@ struct NutritionView: View {
     private var totalProtein:  Double { todayEntries.reduce(0) { $0 + $1.protein } }
     private var totalFat:      Double { todayEntries.reduce(0) { $0 + $1.fat } }
     private var totalCarbs:    Double { todayEntries.reduce(0) { $0 + $1.carbs } }
+    private var caloriesGoalD: Double { Double(caloriesGoal) }
+    private var proteinGoalD:  Double { Double(proteinGoal) }
+    private var fatGoalD:      Double { Double(fatGoal) }
+    private var carbsGoalD:    Double { Double(carbsGoal) }
 
     private var headerDateText: String {
         if Calendar.current.isDateInToday(selectedDate)     { return "Сегодня" }

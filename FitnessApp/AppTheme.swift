@@ -53,6 +53,56 @@ extension LinearGradient {
     )
 }
 
+// MARK: - Achievement Gradients
+
+extension LinearGradient {
+    static let achievementGold = LinearGradient(
+        colors: [Color(red: 1, green: 0.85, blue: 0.1), Color(red: 0.85, green: 0.60, blue: 0)],
+        startPoint: .topLeading, endPoint: .bottomTrailing
+    )
+    static let achievementSilver = LinearGradient(
+        colors: [Color(red: 0.75, green: 0.75, blue: 0.78), Color(red: 0.55, green: 0.55, blue: 0.60)],
+        startPoint: .topLeading, endPoint: .bottomTrailing
+    )
+    static let achievementBronze = LinearGradient(
+        colors: [Color(red: 0.80, green: 0.50, blue: 0.20), Color(red: 0.60, green: 0.30, blue: 0.10)],
+        startPoint: .topLeading, endPoint: .bottomTrailing
+    )
+}
+
+// MARK: - Shimmer Modifier
+
+struct ShimmerModifier: ViewModifier {
+    @State private var phase: CGFloat = -1
+
+    func body(content: Content) -> some View {
+        content
+            .overlay(
+                GeometryReader { geo in
+                    LinearGradient(
+                        colors: [.clear, .white.opacity(0.35), .clear],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                    .frame(width: geo.size.width * 2)
+                    .offset(x: geo.size.width * phase)
+                    .onAppear {
+                        withAnimation(.linear(duration: 1.6).repeatForever(autoreverses: false)) {
+                            phase = 1
+                        }
+                    }
+                }
+                .clipped()
+            )
+    }
+}
+
+extension View {
+    func shimmer() -> some View {
+        modifier(ShimmerModifier())
+    }
+}
+
 // MARK: - Scale Button Style
 
 struct ScaleButtonStyle: ButtonStyle {
