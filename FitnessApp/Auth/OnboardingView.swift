@@ -2,7 +2,7 @@
 //  OnboardingView.swift
 //  FitnessApp
 //
-//  4-step onboarding after registration: name → age → body → goals.
+//  4-step onboarding after registration — dark NRC style
 //
 
 import SwiftUI
@@ -25,13 +25,11 @@ struct OnboardingView: View {
             Color(.systemGroupedBackground).ignoresSafeArea()
 
             VStack(spacing: 0) {
-                // Progress bar
                 progressBar
-                    .padding(.horizontal, 24)
+                    .padding(.horizontal, DS.xxl)
                     .padding(.top, 60)
-                    .padding(.bottom, 32)
+                    .padding(.bottom, DS.xxxl)
 
-                // Step content
                 ZStack {
                     stepView(0) { stepName }
                     stepView(1) { stepAge }
@@ -40,9 +38,18 @@ struct OnboardingView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-                // Navigation buttons
+                if let err = auth.errorMessage {
+                    Text(err)
+                        .font(.caption)
+                        .foregroundColor(.cardioRed)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, DS.xxl)
+                        .padding(.top, DS.sm)
+                        .transition(.opacity)
+                }
+
                 navButtons
-                    .padding(.horizontal, 24)
+                    .padding(.horizontal, DS.xxl)
                     .padding(.bottom, 48)
             }
         }
@@ -51,7 +58,7 @@ struct OnboardingView: View {
     // MARK: - Progress Bar
 
     private var progressBar: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: DS.sm) {
             HStack {
                 Text("Настройка профиля")
                     .font(.headline).fontWeight(.semibold)
@@ -61,21 +68,21 @@ struct OnboardingView: View {
             }
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
-                    RoundedRectangle(cornerRadius: 4)
-                        .fill(Color(.systemGray5))
-                        .frame(height: 6)
-                    RoundedRectangle(cornerRadius: 4)
+                    RoundedRectangle(cornerRadius: DS.xs)
+                        .fill(Color(.secondarySystemBackground))
+                        .frame(height: 5)
+                    RoundedRectangle(cornerRadius: DS.xs)
                         .fill(LinearGradient.primaryGradient)
                         .frame(width: geo.size.width * CGFloat(step + 1) / CGFloat(totalSteps),
-                               height: 6)
+                               height: 5)
                         .animation(.spring(response: 0.45, dampingFraction: 0.8), value: step)
                 }
             }
-            .frame(height: 6)
+            .frame(height: 5)
         }
     }
 
-    // MARK: - Step Content Wrapper
+    // MARK: - Step Wrapper
 
     private func stepView<Content: View>(_ idx: Int, @ViewBuilder content: () -> Content) -> some View {
         content()
@@ -88,46 +95,51 @@ struct OnboardingView: View {
     // MARK: - Step 1: Name
 
     private var stepName: some View {
-        VStack(spacing: 32) {
+        VStack(spacing: DS.xxxl) {
             stepIcon("person.fill", gradient: .primaryGradient)
-            VStack(spacing: 8) {
+
+            VStack(spacing: DS.sm) {
                 Text("Как тебя зовут?")
                     .font(.title2).fontWeight(.bold)
                 Text("Мы будем обращаться к тебе по имени")
                     .font(.subheadline).foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
             }
+
             TextField("Введи имя", text: $name)
                 .font(.title3)
                 .multilineTextAlignment(.center)
-                .padding(16)
-                .background(Color(.systemBackground))
-                .cornerRadius(16)
-                .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 3)
-                .padding(.horizontal, 32)
+                .padding(DS.lg)
+                .background(Color(.systemBackground),
+                            in: RoundedRectangle(cornerRadius: DS.rLG, style: .continuous))
+                .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 4)
+                .padding(.horizontal, DS.xxxl)
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, DS.xxl)
     }
 
     // MARK: - Step 2: Age
 
     private var stepAge: some View {
-        VStack(spacing: 32) {
+        VStack(spacing: DS.xxxl) {
             stepIcon("birthday.cake.fill", gradient: .cardioGradient)
-            VStack(spacing: 8) {
+
+            VStack(spacing: DS.sm) {
                 Text("Сколько тебе лет?")
                     .font(.title2).fontWeight(.bold)
                 Text("Нужно для расчёта норм и рекомендаций")
                     .font(.subheadline).foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
             }
-            // Large age picker
-            VStack(spacing: 16) {
+
+            VStack(spacing: DS.lg) {
                 Text("\(age)")
-                    .font(.system(size: 72, weight: .bold, design: .rounded))
+                    .font(.system(size: 72, weight: .black, design: .rounded))
                     .foregroundColor(.primaryGreen)
                     .animation(.spring(response: 0.2), value: age)
-                HStack(spacing: 32) {
+                    .contentTransition(.numericText())
+
+                HStack(spacing: DS.xxxl) {
                     stepperButton(icon: "minus", color: .cardioOrange) {
                         if age > 10 { age -= 1 }
                     }
@@ -136,21 +148,22 @@ struct OnboardingView: View {
                     }
                 }
             }
-            .padding(28)
-            .background(Color(.systemBackground))
-            .cornerRadius(24)
-            .shadow(color: .black.opacity(0.07), radius: 12, x: 0, y: 4)
-            .padding(.horizontal, 32)
+            .padding(DS.xxl)
+            .background(Color(.systemBackground),
+                        in: RoundedRectangle(cornerRadius: DS.rXL, style: .continuous))
+            .shadow(color: .black.opacity(0.2), radius: 14, x: 0, y: 5)
+            .padding(.horizontal, DS.xxxl)
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, DS.xxl)
     }
 
     // MARK: - Step 3: Body
 
     private var stepBody: some View {
-        VStack(spacing: 28) {
+        VStack(spacing: DS.xxl) {
             stepIcon("figure.arms.open", gradient: .strengthGradient)
-            VStack(spacing: 8) {
+
+            VStack(spacing: DS.sm) {
                 Text("Параметры тела")
                     .font(.title2).fontWeight(.bold)
                 Text("Используем для расчёта ИМТ и КБЖУ")
@@ -158,33 +171,22 @@ struct OnboardingView: View {
                     .multilineTextAlignment(.center)
             }
 
-            VStack(spacing: 16) {
-                sliderCard(
-                    title: "Вес",
-                    value: $weight,
-                    range: 30...200,
-                    unit: "кг",
-                    color: .primaryGreen
-                )
-                sliderCard(
-                    title: "Рост",
-                    value: $height,
-                    range: 100...250,
-                    unit: "см",
-                    color: .strengthPurple
-                )
+            VStack(spacing: DS.lg) {
+                sliderCard(title: "Вес",  value: $weight, range: 30...200, unit: "кг", color: .primaryGreen)
+                sliderCard(title: "Рост", value: $height, range: 100...250, unit: "см", color: .strengthPurple)
             }
-            .padding(.horizontal, 24)
+            .padding(.horizontal, DS.xxl)
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, DS.xxl)
     }
 
     // MARK: - Step 4: Goals
 
     private var stepGoals: some View {
-        VStack(spacing: 28) {
+        VStack(spacing: DS.xxl) {
             stepIcon("target", gradient: .nutritionGradient)
-            VStack(spacing: 8) {
+
+            VStack(spacing: DS.sm) {
                 Text("Твои цели")
                     .font(.title2).fontWeight(.bold)
                 Text("Установи начальные цели — потом можно изменить")
@@ -192,43 +194,28 @@ struct OnboardingView: View {
                     .multilineTextAlignment(.center)
             }
 
-            VStack(spacing: 16) {
-                goalCard(
-                    icon: "flame.fill",
-                    title: "Калории в день",
-                    value: $calGoal,
-                    range: 1200...4000,
-                    step: 50,
-                    unit: "ккал",
-                    color: .cardioOrange
-                )
-                goalCard(
-                    icon: "figure.walk",
-                    title: "Шаги в день",
-                    value: $stepsGoal,
-                    range: 2000...25000,
-                    step: 500,
-                    unit: "шаг",
-                    color: .primaryGreen
-                )
+            VStack(spacing: DS.lg) {
+                goalCard(icon: "flame.fill",   title: "Калории в день",
+                         value: $calGoal,   range: 1200...4000, step: 50,  unit: "ккал", color: .cardioOrange)
+                goalCard(icon: "figure.walk",  title: "Шаги в день",
+                         value: $stepsGoal, range: 2000...25000, step: 500, unit: "шаг",  color: .primaryGreen)
             }
-            .padding(.horizontal, 24)
+            .padding(.horizontal, DS.xxl)
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, DS.xxl)
     }
 
-    // MARK: - Navigation Buttons
+    // MARK: - Nav Buttons
 
     private var navButtons: some View {
-        HStack(spacing: 14) {
+        HStack(spacing: DS.md) {
             if step > 0 {
                 Button(action: prevStep) {
                     Image(systemName: "chevron.left")
                         .font(.system(size: 16, weight: .semibold))
                         .frame(width: 52, height: 52)
-                        .background(Color(.systemBackground))
-                        .clipShape(Circle())
-                        .shadow(color: .black.opacity(0.07), radius: 8, x: 0, y: 3)
+                        .background(Color(.systemBackground), in: Circle())
+                        .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 4)
                 }
                 .buttonStyle(ScaleButtonStyle())
             }
@@ -244,11 +231,15 @@ struct OnboardingView: View {
                     }
                 }
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 18)
-                .background(isStepValid ? LinearGradient.primaryGradient : LinearGradient(colors: [Color(.systemGray4)], startPoint: .leading, endPoint: .trailing))
-                .cornerRadius(18)
-                .shadow(color: isStepValid ? Color.primaryGreen.opacity(0.4) : .clear,
-                        radius: 12, x: 0, y: 4)
+                .padding(.vertical, DS.lg)
+                .background(
+                    isStepValid
+                    ? AnyShapeStyle(LinearGradient.primaryGradient)
+                    : AnyShapeStyle(Color(.systemGray4)),
+                    in: RoundedRectangle(cornerRadius: DS.rLG, style: .continuous)
+                )
+                .shadow(color: isStepValid ? Color.primaryGreen.opacity(0.45) : .clear,
+                        radius: 14, x: 0, y: 5)
             }
             .buttonStyle(ScaleButtonStyle())
             .disabled(!isStepValid || auth.isLoading)
@@ -270,10 +261,12 @@ struct OnboardingView: View {
         } else {
             Task {
                 await auth.saveOnboardingProfile(
-                    name: name.trimmingCharacters(in: .whitespaces),
-                    age: age,
-                    weight: weight,
-                    height: height
+                    name:      name.trimmingCharacters(in: .whitespaces),
+                    age:       age,
+                    weight:    weight,
+                    height:    height,
+                    calGoal:   calGoal,
+                    stepsGoal: stepsGoal
                 )
             }
         }
@@ -285,8 +278,10 @@ struct OnboardingView: View {
 
     private func stepIcon(_ name: String, gradient: LinearGradient) -> some View {
         ZStack {
-            Circle().fill(gradient).frame(width: 88, height: 88)
-                .shadow(color: .black.opacity(0.15), radius: 16, x: 0, y: 6)
+            Circle()
+                .fill(gradient)
+                .frame(width: 88, height: 88)
+                .shadow(color: .black.opacity(0.25), radius: 18, x: 0, y: 8)
             Image(systemName: name)
                 .font(.system(size: 38))
                 .foregroundColor(.white)
@@ -299,15 +294,14 @@ struct OnboardingView: View {
                 .font(.system(size: 20, weight: .semibold))
                 .foregroundColor(color)
                 .frame(width: 52, height: 52)
-                .background(color.opacity(0.12))
-                .clipShape(Circle())
+                .background(color.opacity(0.12), in: Circle())
         }
         .buttonStyle(ScaleButtonStyle())
     }
 
     private func sliderCard(title: String, value: Binding<Double>,
                              range: ClosedRange<Double>, unit: String, color: Color) -> some View {
-        VStack(spacing: 12) {
+        VStack(spacing: DS.md) {
             HStack {
                 Text(title).font(.subheadline).fontWeight(.medium)
                 Spacer()
@@ -316,31 +310,31 @@ struct OnboardingView: View {
             }
             Slider(value: value, in: range, step: 0.5).tint(color)
         }
-        .padding(16)
-        .background(Color(.systemBackground))
-        .cornerRadius(16)
-        .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 3)
+        .padding(DS.lg)
+        .background(Color(.systemBackground),
+                    in: RoundedRectangle(cornerRadius: DS.rLG, style: .continuous))
+        .shadow(color: .black.opacity(0.18), radius: 10, x: 0, y: 4)
     }
 
     private func goalCard(icon: String, title: String, value: Binding<Int>,
                            range: ClosedRange<Int>, step: Int, unit: String, color: Color) -> some View {
-        HStack(spacing: 14) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 10).fill(color.opacity(0.12)).frame(width: 38, height: 38)
-                Image(systemName: icon).font(.system(size: 16)).foregroundColor(color)
-            }
+        HStack(spacing: DS.md) {
+            Image(systemName: icon)
+                .font(.system(size: 16))
+                .foregroundColor(color)
+                .iconBadge(color: color, radius: DS.rSM, size: 38)
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(title).font(.subheadline).fontWeight(.medium)
                 Text("\(value.wrappedValue) \(unit)")
                     .font(.caption).foregroundColor(color).fontWeight(.semibold)
             }
             Spacer()
-            Stepper("", value: value, in: range, step: step)
-                .labelsHidden()
+            Stepper("", value: value, in: range, step: step).labelsHidden()
         }
-        .padding(14)
-        .background(Color(.systemBackground))
-        .cornerRadius(16)
-        .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 3)
+        .padding(DS.md)
+        .background(Color(.systemBackground),
+                    in: RoundedRectangle(cornerRadius: DS.rLG, style: .continuous))
+        .shadow(color: .black.opacity(0.18), radius: 10, x: 0, y: 4)
     }
 }

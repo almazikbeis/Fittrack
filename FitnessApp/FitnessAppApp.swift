@@ -9,8 +9,9 @@ import SwiftUI
 struct FitnessAppApp: App {
     let persistenceController = PersistenceController.shared
 
-    @StateObject private var authViewModel = AuthViewModel()
-    @StateObject private var syncService   = SyncService.shared
+    @StateObject private var authViewModel    = AuthViewModel()
+    @StateObject private var syncService      = SyncService.shared
+    @StateObject private var notifManager     = NotificationManager.shared
 
     var body: some Scene {
         WindowGroup {
@@ -18,6 +19,7 @@ struct FitnessAppApp: App {
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .environmentObject(authViewModel)
                 .environmentObject(syncService)
+                .task { await notifManager.requestPermission() }
         }
     }
 

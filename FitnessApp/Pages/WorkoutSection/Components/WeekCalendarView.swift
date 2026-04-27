@@ -12,53 +12,36 @@ struct WeekCalendarView: View {
 
     init(selectedDate: Binding<Date>) {
         self._selectedDate = selectedDate
-        let cal = Calendar.current
+        let cal   = Calendar.current
         let today = selectedDate.wrappedValue
-        let weekday = cal.component(.weekday, from: today)
-        // Monday-first: Sunday(1) → -6, Mon(2) → 0, Tue(3) → -1 ...
-        let daysToMonday = weekday == 1 ? -6 : 2 - weekday
-        let monday = cal.date(byAdding: .day, value: daysToMonday, to: today) ?? today
+        let weekday    = cal.component(.weekday, from: today)
+        let daysToMon  = weekday == 1 ? -6 : 2 - weekday
+        let monday     = cal.date(byAdding: .day, value: daysToMon, to: today) ?? today
         self._currentWeekStart = State(initialValue: monday)
     }
 
     var body: some View {
-        VStack(spacing: 14) {
-            // Month / navigation
+        VStack(spacing: DS.md) {
+            // Month / navigation row
             HStack {
-                Button(action: {
+                navButton("chevron.left") {
                     withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) { moveWeek(by: -1) }
-                }) {
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundColor(.primary)
-                        .frame(width: 32, height: 32)
-                        .background(Color(.systemGroupedBackground))
-                        .clipShape(Circle())
-                        .shadow(color: .black.opacity(0.06), radius: 4, x: 0, y: 2)
                 }
 
                 Spacer()
 
                 Text(monthYearTitle)
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(.system(size: 14, weight: .semibold))
 
                 Spacer()
 
-                Button(action: {
+                navButton("chevron.right") {
                     withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) { moveWeek(by: 1) }
-                }) {
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundColor(.primary)
-                        .frame(width: 32, height: 32)
-                        .background(Color(.systemGroupedBackground))
-                        .clipShape(Circle())
-                        .shadow(color: .black.opacity(0.06), radius: 4, x: 0, y: 2)
                 }
             }
 
             // Day cells
-            HStack(spacing: 6) {
+            HStack(spacing: DS.xs) {
                 ForEach(weekDays(), id: \.self) { day in
                     DayCell(
                         day: day,
@@ -69,14 +52,24 @@ struct WeekCalendarView: View {
                         withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                             selectedDate = day
                         }
+                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
                     }
                 }
             }
         }
-        .padding(16)
-        .background(Color(.systemBackground))
-        .cornerRadius(22)
-        .shadow(color: .black.opacity(0.06), radius: 12, x: 0, y: 4)
+        .padding(DS.lg)
+        .nrcCard(radius: DS.rXL)
+    }
+
+    private func navButton(_ icon: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: icon)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundColor(.primary)
+                .frame(width: 32, height: 32)
+                .background(Color(.secondarySystemBackground), in: Circle())
+        }
+        .buttonStyle(ScaleButtonStyle())
     }
 
     private var monthYearTitle: String {
@@ -88,7 +81,9 @@ struct WeekCalendarView: View {
     }
 
     private func moveWeek(by offset: Int) {
-        guard let newStart = calendar.date(byAdding: .weekOfYear, value: offset, to: currentWeekStart) else { return }
+        guard let newStart = calendar.date(byAdding: .weekOfYear,
+                                           value: offset,
+                                           to: currentWeekStart) else { return }
         currentWeekStart = newStart
     }
 
@@ -107,37 +102,36 @@ private struct DayCell: View {
     private let calendar = Calendar.current
 
     private var dayLetters: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE"
-        formatter.locale = Locale(identifier: "ru_RU")
-        return String(formatter.string(from: day).prefix(2)).uppercased()
+        let f = DateFormatter()
+        f.dateFormat = "EEE"
+        f.locale = Locale(identifier: "ru_RU")
+        return String(f.string(from: day).prefix(2)).uppercased()
     }
 
     private var dayNumber: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "d"
-        return formatter.string(from: day)
+        let f = DateFormatter(); f.dateFormat = "d"
+        return f.string(from: day)
     }
 
     var body: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: DS.xs) {
             Text(dayLetters)
                 .font(.system(size: 10, weight: .medium))
-                .foregroundColor(isSelected ? .white.opacity(0.8) : .secondary)
+                .foregroundColor(isSelected ? .white.opacity(0.75) : .secondary)
 
             Text(dayNumber)
                 .font(.system(size: 15, weight: isSelected || isToday ? .bold : .regular))
                 .foregroundColor(isSelected ? .white : (isToday ? .primaryGreen : .primary))
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 10)
+        .padding(.vertical, DS.md)
         .background(
             Group {
                 if isSelected {
-                    RoundedRectangle(cornerRadius: 14)
+                    RoundedRectangle(cornerRadius: DS.rMD, style: .continuous)
                         .fill(LinearGradient.primaryGradient)
                 } else {
-                    RoundedRectangle(cornerRadius: 14)
+                    RoundedRectangle(cornerRadius: DS.rMD, style: .continuous)
                         .fill(Color.clear)
                 }
             }
@@ -145,7 +139,7 @@ private struct DayCell: View {
         .overlay(
             Group {
                 if isToday && !isSelected {
-                    RoundedRectangle(cornerRadius: 14)
+                    RoundedRectangle(cornerRadius: DS.rMD, style: .continuous)
                         .stroke(Color.primaryGreen, lineWidth: 1.5)
                 }
             }

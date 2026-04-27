@@ -17,7 +17,14 @@ final class SupabaseManager {
     private init() {
         client = SupabaseClient(
             supabaseURL: URL(string: AppSecrets.supabaseURL)!,
-            supabaseKey: AppSecrets.supabaseAnonKey
+            supabaseKey: AppSecrets.supabaseAnonKey,
+            options: SupabaseClientOptions(
+                auth: SupabaseClientOptions.AuthOptions(
+                    storage: KeychainLocalStorage(),
+                    autoRefreshToken: true,
+                    emitLocalSessionAsInitialSession: true
+                )
+            )
         )
     }
 

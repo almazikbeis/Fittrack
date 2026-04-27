@@ -91,8 +91,17 @@ final class AuthViewModel: ObservableObject {
         do {
             let response = try await SupabaseManager.shared.auth
                 .signUp(email: email, password: password)
-            currentUser = response.user
-            authState   = .onboarding
+
+            if let session = response.session {
+                // Email confirmation disabled — signed in immediately
+                currentUser = session.user
+                authState   = .onboarding
+            } else {
+                // Email confirmation required — user created but no session yet
+                currentUser = response.user
+                errorMessage = "Аккаунт создан! Проверьте почту \(email) и подтвердите email, затем войдите."
+                authState   = .unauthenticated
+            }
         } catch {
             errorMessage = localizedAuthError(error)
         }
@@ -135,22 +144,36 @@ final class AuthViewModel: ObservableObject {
         }
     }
 
-    func saveOnboardingProfile(name: String, age: Int, weight: Double, height: Double) async {
-        guard let userId = currentUser?.id else { return }
+    func saveOnboardingProfile(
+        name: String, age: Int, weight: Double, height: Double,
+        calGoal: Int = 2000, stepsGoal: Int = 10000
+    ) async {
+        guard let userId = currentUser?.id else {
+            errorMessage = "Ошибка: пользователь не найден. Попробуйте войти снова."
+            return
+        }
         isLoading = true
         defer { isLoading = false }
-        let patch = UserProfileUpdate(name: name, age: age,
-                                      weight: weight, height: height,
-                                      updatedAt: Date())
+
+        var patch = UserProfileUpdate(
+            id:        userId,
+            name:      name,
+            age:       age,
+            weight:    weight,
+            height:    height,
+            updatedAt: Date()
+        )
+        patch.goalCalories = calGoal
+        patch.goalSteps    = stepsGoal
+
         do {
             try await SupabaseManager.shared.client
                 .from("profiles")
-                .upsert(patch)
-                .eq("id", value: userId.uuidString)
+                .upsert(patch)   // upsert без .eq() — id в payload → Supabase сам разрешит конфликт
                 .execute()
             await loadProfile(userId: userId)
         } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = "Не удалось сохранить профиль: \(error.localizedDescription)"
         }
     }
 
@@ -203,18 +226,46 @@ final class AuthViewModel: ObservableObject {
 
     private func localizedAuthError(_ error: Error) -> String {
         let msg = error.localizedDescription.lowercased()
-        if msg.contains("invalid login") || msg.contains("credentials") {
+
+        // Network
+        if msg.contains("network") || msg.contains("internet")
+            || msg.contains("hostname") || msg.contains("connection")
+            || msg.contains("-1003") || msg.contains("offline") {
+            return "Нет подключения к интернету. Проверьте сеть."
+        }
+        // Invalid credentials
+        if msg.contains("invalid login") || msg.contains("credentials")
+            || msg.contains("invalid email") || msg.contains("wrong password") {
             return "Неверный email или пароль."
         }
-        if msg.contains("already registered") || msg.contains("already exists") {
+        // Already registered
+        if msg.contains("already registered") || msg.contains("already exists")
+            || msg.contains("user already") || msg.contains("email already") {
             return "Этот email уже зарегистрирован. Войдите."
         }
-        if msg.contains("network") || msg.contains("internet") {
-            return "Нет подключения к интернету."
-        }
-        if msg.contains("weak password") {
+        // Weak password
+        if msg.contains("weak password") || msg.contains("password should")
+            || msg.contains("at least 6") || msg.contains("password is too") {
             return "Пароль слишком простой. Минимум 6 символов."
         }
-        return error.localizedDescription
+        // Email not confirmed
+        if msg.contains("email not confirmed") || msg.contains("not confirmed") {
+            return "Email не подтверждён. Проверьте почту и перейдите по ссылке."
+        }
+        // Rate limit
+        if msg.contains("rate limit") || msg.contains("too many") || msg.contains("after") {
+            return "Слишком много попыток. Подождите немного."
+        }
+        // Unexpected / server error
+        if msg.contains("unexpected") || msg.contains("server error")
+            || msg.contains("500") || msg.contains("internal") {
+            return "Ошибка сервера. Попробуйте через минуту."
+        }
+        // Timeout
+        if msg.contains("timeout") || msg.contains("timed out") {
+            return "Время ожидания истекло. Проверьте соединение."
+        }
+
+        return "Ошибка: \(error.localizedDescription)"
     }
 }

@@ -19,27 +19,31 @@ struct FoodDatabaseItem: Identifiable {
 }
 
 let foodDatabase: [FoodDatabaseItem] = [
-    FoodDatabaseItem(name: "Куриная грудка",  emoji: "🍗",  caloriesPer100g: 165, proteinPer100g: 31.0, fatPer100g: 3.6,  carbsPer100g: 0.0),
-    FoodDatabaseItem(name: "Яйцо",            emoji: "🥚",  caloriesPer100g: 155, proteinPer100g: 13.0, fatPer100g: 11.0, carbsPer100g: 1.1),
-    FoodDatabaseItem(name: "Овсянка",         emoji: "🥣",  caloriesPer100g: 389, proteinPer100g: 17.0, fatPer100g: 7.0,  carbsPer100g: 66.0),
-    FoodDatabaseItem(name: "Рис варёный",     emoji: "🍚",  caloriesPer100g: 130, proteinPer100g: 2.7,  fatPer100g: 0.3,  carbsPer100g: 28.0),
-    FoodDatabaseItem(name: "Гречка варёная",  emoji: "🌾",  caloriesPer100g: 92,  proteinPer100g: 3.4,  fatPer100g: 0.6,  carbsPer100g: 20.0),
-    FoodDatabaseItem(name: "Творог 5%",       emoji: "🧀",  caloriesPer100g: 121, proteinPer100g: 17.0, fatPer100g: 5.0,  carbsPer100g: 1.8),
-    FoodDatabaseItem(name: "Молоко 2.5%",     emoji: "🥛",  caloriesPer100g: 54,  proteinPer100g: 2.8,  fatPer100g: 2.5,  carbsPer100g: 4.7),
-    FoodDatabaseItem(name: "Банан",           emoji: "🍌",  caloriesPer100g: 89,  proteinPer100g: 1.1,  fatPer100g: 0.3,  carbsPer100g: 23.0),
-    FoodDatabaseItem(name: "Яблоко",          emoji: "🍎",  caloriesPer100g: 52,  proteinPer100g: 0.3,  fatPer100g: 0.2,  carbsPer100g: 14.0),
-    FoodDatabaseItem(name: "Хлеб цельный",    emoji: "🍞",  caloriesPer100g: 247, proteinPer100g: 9.2,  fatPer100g: 2.9,  carbsPer100g: 46.0),
-    FoodDatabaseItem(name: "Макароны",        emoji: "🍝",  caloriesPer100g: 371, proteinPer100g: 13.0, fatPer100g: 1.5,  carbsPer100g: 75.0),
-    FoodDatabaseItem(name: "Картофель",       emoji: "🥔",  caloriesPer100g: 77,  proteinPer100g: 2.0,  fatPer100g: 0.1,  carbsPer100g: 17.0),
-    FoodDatabaseItem(name: "Греч. йогурт",    emoji: "🍶",  caloriesPer100g: 97,  proteinPer100g: 10.0, fatPer100g: 5.0,  carbsPer100g: 3.6),
-    FoodDatabaseItem(name: "Лосось",          emoji: "🐟",  caloriesPer100g: 208, proteinPer100g: 20.0, fatPer100g: 13.0, carbsPer100g: 0.0),
-    FoodDatabaseItem(name: "Говядина",        emoji: "🥩",  caloriesPer100g: 187, proteinPer100g: 26.0, fatPer100g: 10.0, carbsPer100g: 0.0),
-    FoodDatabaseItem(name: "Протеин (порошок)", emoji: "💪", caloriesPer100g: 390, proteinPer100g: 75.0, fatPer100g: 5.0,  carbsPer100g: 15.0),
-    FoodDatabaseItem(name: "Орехи",           emoji: "🥜",  caloriesPer100g: 620, proteinPer100g: 20.0, fatPer100g: 52.0, carbsPer100g: 18.0),
-    FoodDatabaseItem(name: "Авокадо",         emoji: "🥑",  caloriesPer100g: 160, proteinPer100g: 2.0,  fatPer100g: 15.0, carbsPer100g: 9.0),
-    FoodDatabaseItem(name: "Тунец (конс.)",   emoji: "🐠",  caloriesPer100g: 116, proteinPer100g: 26.0, fatPer100g: 1.0,  carbsPer100g: 0.0),
-    FoodDatabaseItem(name: "Сыр",             emoji: "🧀",  caloriesPer100g: 380, proteinPer100g: 23.0, fatPer100g: 31.0, carbsPer100g: 0.0),
+    FoodDatabaseItem(name: "Куриная грудка",    emoji: "🍗",  caloriesPer100g: 165, proteinPer100g: 31.0, fatPer100g: 3.6,  carbsPer100g: 0.0),
+    FoodDatabaseItem(name: "Яйцо",              emoji: "🥚",  caloriesPer100g: 155, proteinPer100g: 13.0, fatPer100g: 11.0, carbsPer100g: 1.1),
+    FoodDatabaseItem(name: "Овсянка",           emoji: "🥣",  caloriesPer100g: 389, proteinPer100g: 17.0, fatPer100g: 7.0,  carbsPer100g: 66.0),
+    FoodDatabaseItem(name: "Рис варёный",       emoji: "🍚",  caloriesPer100g: 130, proteinPer100g: 2.7,  fatPer100g: 0.3,  carbsPer100g: 28.0),
+    FoodDatabaseItem(name: "Гречка варёная",    emoji: "🌾",  caloriesPer100g: 92,  proteinPer100g: 3.4,  fatPer100g: 0.6,  carbsPer100g: 20.0),
+    FoodDatabaseItem(name: "Творог 5%",         emoji: "🧀",  caloriesPer100g: 121, proteinPer100g: 17.0, fatPer100g: 5.0,  carbsPer100g: 1.8),
+    FoodDatabaseItem(name: "Молоко 2.5%",       emoji: "🥛",  caloriesPer100g: 54,  proteinPer100g: 2.8,  fatPer100g: 2.5,  carbsPer100g: 4.7),
+    FoodDatabaseItem(name: "Банан",             emoji: "🍌",  caloriesPer100g: 89,  proteinPer100g: 1.1,  fatPer100g: 0.3,  carbsPer100g: 23.0),
+    FoodDatabaseItem(name: "Яблоко",            emoji: "🍎",  caloriesPer100g: 52,  proteinPer100g: 0.3,  fatPer100g: 0.2,  carbsPer100g: 14.0),
+    FoodDatabaseItem(name: "Хлеб цельный",      emoji: "🍞",  caloriesPer100g: 247, proteinPer100g: 9.2,  fatPer100g: 2.9,  carbsPer100g: 46.0),
+    FoodDatabaseItem(name: "Макароны",          emoji: "🍝",  caloriesPer100g: 371, proteinPer100g: 13.0, fatPer100g: 1.5,  carbsPer100g: 75.0),
+    FoodDatabaseItem(name: "Картофель",         emoji: "🥔",  caloriesPer100g: 77,  proteinPer100g: 2.0,  fatPer100g: 0.1,  carbsPer100g: 17.0),
+    FoodDatabaseItem(name: "Греч. йогурт",      emoji: "🍶",  caloriesPer100g: 97,  proteinPer100g: 10.0, fatPer100g: 5.0,  carbsPer100g: 3.6),
+    FoodDatabaseItem(name: "Лосось",            emoji: "🐟",  caloriesPer100g: 208, proteinPer100g: 20.0, fatPer100g: 13.0, carbsPer100g: 0.0),
+    FoodDatabaseItem(name: "Говядина",          emoji: "🥩",  caloriesPer100g: 187, proteinPer100g: 26.0, fatPer100g: 10.0, carbsPer100g: 0.0),
+    FoodDatabaseItem(name: "Протеин (порошок)", emoji: "💪",  caloriesPer100g: 390, proteinPer100g: 75.0, fatPer100g: 5.0,  carbsPer100g: 15.0),
+    FoodDatabaseItem(name: "Орехи",             emoji: "🥜",  caloriesPer100g: 620, proteinPer100g: 20.0, fatPer100g: 52.0, carbsPer100g: 18.0),
+    FoodDatabaseItem(name: "Авокадо",           emoji: "🥑",  caloriesPer100g: 160, proteinPer100g: 2.0,  fatPer100g: 15.0, carbsPer100g: 9.0),
+    FoodDatabaseItem(name: "Тунец (конс.)",     emoji: "🐠",  caloriesPer100g: 116, proteinPer100g: 26.0, fatPer100g: 1.0,  carbsPer100g: 0.0),
+    FoodDatabaseItem(name: "Сыр",               emoji: "🧀",  caloriesPer100g: 380, proteinPer100g: 23.0, fatPer100g: 31.0, carbsPer100g: 0.0),
 ]
+
+// MARK: - Mode Enum
+
+private enum AddMode: Int { case database, barcode, custom }
 
 // MARK: - AddFoodView
 
@@ -50,10 +54,16 @@ struct AddFoodView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
 
-    @State private var searchText     = ""
-    @State private var selectedFood: FoodDatabaseItem? = nil
-    @State private var weightGrams    = 100
-    @State private var useCustom      = false
+    @State private var mode:          AddMode = .database
+    @State private var searchText             = ""
+    @State private var selectedFood:  FoodDatabaseItem? = nil
+    @State private var weightGrams            = 100
+
+    // Barcode states
+    @State private var showScanner            = false
+    @State private var isFetchingBarcode      = false
+    @State private var barcodeError:   String? = nil
+    @State private var scannedProduct: FoodDatabaseItem? = nil
 
     // Custom entry
     @State private var customName      = ""
@@ -70,43 +80,53 @@ struct AddFoodView: View {
             : foodDatabase.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
     }
 
-    // Computed macros
-    private var computedCalories: Double { (selectedFood?.caloriesPer100g ?? 0) * Double(weightGrams) / 100 }
-    private var computedProtein:  Double { (selectedFood?.proteinPer100g  ?? 0) * Double(weightGrams) / 100 }
-    private var computedFat:      Double { (selectedFood?.fatPer100g      ?? 0) * Double(weightGrams) / 100 }
-    private var computedCarbs:    Double { (selectedFood?.carbsPer100g    ?? 0) * Double(weightGrams) / 100 }
+    private var activeFood: FoodDatabaseItem? {
+        switch mode {
+        case .database: return selectedFood
+        case .barcode:  return scannedProduct
+        case .custom:   return nil
+        }
+    }
+
+    private var computedCalories: Double { (activeFood?.caloriesPer100g ?? 0) * Double(weightGrams) / 100 }
+    private var computedProtein:  Double { (activeFood?.proteinPer100g  ?? 0) * Double(weightGrams) / 100 }
+    private var computedFat:      Double { (activeFood?.fatPer100g      ?? 0) * Double(weightGrams) / 100 }
+    private var computedCarbs:    Double { (activeFood?.carbsPer100g    ?? 0) * Double(weightGrams) / 100 }
 
     private var canAdd: Bool {
-        useCustom ? (!customName.isEmpty && !customCalories.isEmpty) : selectedFood != nil
+        switch mode {
+        case .database: return selectedFood != nil
+        case .barcode:  return scannedProduct != nil
+        case .custom:   return !customName.isEmpty && !customCalories.isEmpty
+        }
     }
 
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // Meal header
                 mealHeader
 
-                // Mode picker
-                Picker("", selection: $useCustom) {
-                    Text("Из базы").tag(false)
-                    Text("Своё").tag(true)
+                // 3-mode picker
+                Picker("", selection: $mode) {
+                    Text("Из базы").tag(AddMode.database)
+                    Text("Штрихкод").tag(AddMode.barcode)
+                    Text("Своё").tag(AddMode.custom)
                 }
                 .pickerStyle(.segmented)
                 .padding(.horizontal, 20)
                 .padding(.vertical, 12)
 
-                if useCustom {
-                    customEntryForm
-                } else {
-                    databaseForm
+                switch mode {
+                case .database: databaseForm
+                case .barcode:  barcodeForm
+                case .custom:   customEntryForm
                 }
             }
             .background(Color(.systemGroupedBackground).ignoresSafeArea())
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Отмена") { dismiss() }
-                        .foregroundColor(.secondary)
+                    Button("Отмена") { dismiss() }.foregroundColor(.secondary)
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Добавить") { addFood() }
@@ -116,6 +136,18 @@ struct AddFoodView: View {
                 }
             }
         }
+        .fullScreenCover(isPresented: $showScanner) {
+            ZStack(alignment: .topTrailing) {
+                BarcodeScannerView(
+                    onScan: { code in
+                        showScanner = false
+                        Task { await lookupBarcode(code) }
+                    },
+                    onCancel: { showScanner = false }
+                )
+                .ignoresSafeArea()
+            }
+        }
     }
 
     // MARK: - Meal Header
@@ -123,20 +155,13 @@ struct AddFoodView: View {
     private var mealHeader: some View {
         HStack(spacing: 12) {
             ZStack {
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(meal.gradient)
-                    .frame(width: 40, height: 40)
-                Image(systemName: meal.icon)
-                    .font(.system(size: 17))
-                    .foregroundColor(.white)
+                RoundedRectangle(cornerRadius: 12).fill(meal.gradient).frame(width: 40, height: 40)
+                Image(systemName: meal.icon).font(.system(size: 17)).foregroundColor(.white)
             }
-            Text(mealType)
-                .font(.headline)
+            Text(mealType).font(.headline)
             Spacer()
         }
-        .padding(.horizontal, 20)
-        .padding(.top, 16)
-        .padding(.bottom, 8)
+        .padding(.horizontal, 20).padding(.top, 16).padding(.bottom, 8)
     }
 
     // MARK: - Database Form
@@ -144,10 +169,8 @@ struct AddFoodView: View {
     private var databaseForm: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 16) {
-                // Search bar
                 HStack(spacing: 8) {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(.secondary)
+                    Image(systemName: "magnifyingglass").foregroundColor(.secondary)
                     TextField("Поиск продукта...", text: $searchText)
                 }
                 .padding(12)
@@ -155,29 +178,121 @@ struct AddFoodView: View {
                 .cornerRadius(12)
                 .padding(.horizontal, 20)
 
-                // Foods grid
                 LazyVGrid(
                     columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())],
                     spacing: 10
                 ) {
-                    ForEach(filteredFoods) { food in
-                        foodCell(food)
-                    }
+                    ForEach(filteredFoods) { food in foodCell(food) }
                 }
                 .padding(.horizontal, 20)
 
-                // Selected food detail
                 if let food = selectedFood {
-                    selectedFoodDetail(food)
-                        .padding(.horizontal, 20)
+                    selectedFoodDetail(food).padding(.horizontal, 20)
                         .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
-
                 Spacer().frame(height: 40)
             }
             .padding(.top, 8)
         }
     }
+
+    // MARK: - Barcode Form
+
+    private var barcodeForm: some View {
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 20) {
+                // Scanner trigger button
+                Button(action: {
+                    barcodeError = nil
+                    scannedProduct = nil
+                    showScanner = true
+                }) {
+                    VStack(spacing: 14) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 20)
+                                .fill(LinearGradient.nutritionGradient.opacity(0.15))
+                                .frame(width: 100, height: 100)
+                            if isFetchingBarcode {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: .nutritionPurple))
+                                    .scaleEffect(1.4)
+                            } else {
+                                Image(systemName: "barcode.viewfinder")
+                                    .font(.system(size: 44))
+                                    .foregroundColor(.nutritionPurple)
+                            }
+                        }
+
+                        Text(isFetchingBarcode ? "Ищем продукт..." : "Сканировать штрихкод")
+                            .font(.headline).fontWeight(.semibold)
+                            .foregroundColor(.nutritionPurple)
+                        Text("EAN-8, EAN-13, UPC — работает с любыми упаковками")
+                            .font(.caption).foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(24)
+                    .background(Color(.systemBackground))
+                    .cornerRadius(22)
+                    .shadow(color: .black.opacity(0.06), radius: 10, x: 0, y: 4)
+                }
+                .buttonStyle(ScaleButtonStyle())
+                .disabled(isFetchingBarcode)
+                .padding(.horizontal, 20)
+
+                // Error state
+                if let err = barcodeError {
+                    HStack(spacing: 10) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundColor(.cardioOrange)
+                        Text(err).font(.subheadline).foregroundColor(.primary)
+                    }
+                    .padding(14)
+                    .background(Color.cardioOrange.opacity(0.08))
+                    .cornerRadius(14)
+                    .padding(.horizontal, 20)
+                }
+
+                // Scanned product result
+                if let product = scannedProduct {
+                    VStack(alignment: .leading, spacing: 14) {
+                        HStack(spacing: 10) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .font(.system(size: 18)).foregroundColor(.primaryGreen)
+                            Text("Продукт найден!")
+                                .font(.subheadline).fontWeight(.semibold).foregroundColor(.primaryGreen)
+                        }
+                        selectedFoodDetail(product)
+                    }
+                    .padding(.horizontal, 20)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
+
+                Spacer().frame(height: 60)
+            }
+            .padding(.top, 20)
+        }
+    }
+
+    // MARK: - Custom Form
+
+    private var customEntryForm: some View {
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 12) {
+                customField(label: "Название", placeholder: "Например: Протеиновый бар", text: $customName)
+                customField(label: "Калории (ккал)", placeholder: "0", text: $customCalories, keyboard: .decimalPad)
+                HStack(spacing: 10) {
+                    customField(label: "Белки (г)",   placeholder: "0", text: $customProtein, keyboard: .decimalPad)
+                    customField(label: "Жиры (г)",    placeholder: "0", text: $customFat,     keyboard: .decimalPad)
+                    customField(label: "Углев. (г)",  placeholder: "0", text: $customCarbs,   keyboard: .decimalPad)
+                }
+                Spacer().frame(height: 40)
+            }
+            .padding(.horizontal, 20).padding(.top, 8)
+        }
+    }
+
+    // MARK: - Shared components
 
     private func foodCell(_ food: FoodDatabaseItem) -> some View {
         let isSelected = selectedFood?.id == food.id
@@ -188,20 +303,14 @@ struct AddFoodView: View {
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
         }) {
             VStack(spacing: 4) {
-                Text(food.emoji)
-                    .font(.title2)
-                Text(food.name)
-                    .font(.caption2)
-                    .fontWeight(.medium)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
+                Text(food.emoji).font(.title2)
+                Text(food.name).font(.caption2).fontWeight(.medium)
+                    .multilineTextAlignment(.center).lineLimit(2)
                     .foregroundColor(isSelected ? .white : .primary)
                 Text("\(Int(food.caloriesPer100g)) ккал")
-                    .font(.system(size: 9))
-                    .foregroundColor(isSelected ? .white.opacity(0.8) : .secondary)
+                    .font(.system(size: 9)).foregroundColor(isSelected ? .white.opacity(0.8) : .secondary)
             }
-            .padding(10)
-            .frame(maxWidth: .infinity, minHeight: 80)
+            .padding(10).frame(maxWidth: .infinity, minHeight: 80)
             .background(
                 RoundedRectangle(cornerRadius: 14)
                     .fill(isSelected
@@ -216,46 +325,26 @@ struct AddFoodView: View {
     private func selectedFoodDetail(_ food: FoodDatabaseItem) -> some View {
         VStack(spacing: 14) {
             Divider()
-
-            // Weight stepper
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(food.name + " " + food.emoji)
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                    Text("на 100 г: \(Int(food.caloriesPer100g)) ккал")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
+                    Text("\(food.emoji) \(food.name)").font(.subheadline).fontWeight(.semibold)
+                    Text("на 100 г: \(Int(food.caloriesPer100g)) ккал").font(.caption2).foregroundColor(.secondary)
                 }
                 Spacer()
                 HStack(spacing: 10) {
                     Button(action: { if weightGrams > 10 { weightGrams -= 10 } }) {
-                        Image(systemName: "minus")
-                            .font(.system(size: 14, weight: .semibold))
-                            .frame(width: 32, height: 32)
-                            .background(Color(.systemGray5))
-                            .clipShape(Circle())
-                    }
-                    .buttonStyle(ScaleButtonStyle())
-
-                    Text("\(weightGrams) г")
-                        .font(.headline)
-                        .fontWeight(.bold)
-                        .frame(minWidth: 56)
+                        Image(systemName: "minus").font(.system(size: 14, weight: .semibold))
+                            .frame(width: 32, height: 32).background(Color(.systemGray5)).clipShape(Circle())
+                    }.buttonStyle(ScaleButtonStyle())
+                    Text("\(weightGrams) г").font(.headline).fontWeight(.bold).frame(minWidth: 56)
                         .multilineTextAlignment(.center)
-
                     Button(action: { if weightGrams < 2000 { weightGrams += 10 } }) {
-                        Image(systemName: "plus")
-                            .font(.system(size: 14, weight: .semibold))
+                        Image(systemName: "plus").font(.system(size: 14, weight: .semibold))
                             .frame(width: 32, height: 32)
-                            .background(Color.primaryGreen.opacity(0.15))
-                            .clipShape(Circle())
-                    }
-                    .buttonStyle(ScaleButtonStyle())
+                            .background(Color.primaryGreen.opacity(0.15)).clipShape(Circle())
+                    }.buttonStyle(ScaleButtonStyle())
                 }
             }
-
-            // Macros preview
             HStack(spacing: 0) {
                 macroBlock(label: "Калории", value: String(format: "%.0f", computedCalories), unit: "ккал", color: .primaryGreen)
                 Divider().frame(height: 32).opacity(0.35)
@@ -266,61 +355,51 @@ struct AddFoodView: View {
                 macroBlock(label: "Углев.",  value: String(format: "%.1f", computedCarbs),     unit: "г",    color: .nutritionBlue)
             }
             .padding(.vertical, 12)
-            .background(Color(.systemBackground))
-            .cornerRadius(14)
+            .background(Color(.systemBackground)).cornerRadius(14)
             .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 2)
         }
     }
 
     private func macroBlock(label: String, value: String, unit: String, color: Color) -> some View {
         VStack(spacing: 3) {
-            Text(value)
-                .font(.subheadline)
-                .fontWeight(.bold)
-                .foregroundColor(color)
-            Text(unit)
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            Text(label)
-                .font(.caption2)
-                .foregroundColor(.secondary)
-        }
-        .frame(maxWidth: .infinity)
-    }
-
-    // MARK: - Custom Form
-
-    private var customEntryForm: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(spacing: 12) {
-                customField(label: "Название", placeholder: "Например: Протеиновый бар", text: $customName)
-                customField(label: "Калории (ккал)", placeholder: "0", text: $customCalories, keyboard: .decimalPad)
-
-                HStack(spacing: 10) {
-                    customField(label: "Белки (г)", placeholder: "0", text: $customProtein, keyboard: .decimalPad)
-                    customField(label: "Жиры (г)",  placeholder: "0", text: $customFat,     keyboard: .decimalPad)
-                    customField(label: "Углев. (г)", placeholder: "0", text: $customCarbs,  keyboard: .decimalPad)
-                }
-
-                Spacer().frame(height: 40)
-            }
-            .padding(.horizontal, 20)
-            .padding(.top, 8)
-        }
+            Text(value).font(.subheadline).fontWeight(.bold).foregroundColor(color)
+            Text(unit).font(.caption2).foregroundColor(.secondary)
+            Text(label).font(.caption2).foregroundColor(.secondary)
+        }.frame(maxWidth: .infinity)
     }
 
     private func customField(label: String, placeholder: String,
                              text: Binding<String>, keyboard: UIKeyboardType = .default) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(label)
-                .font(.caption)
-                .fontWeight(.medium)
-                .foregroundColor(.secondary)
-            TextField(placeholder, text: text)
-                .keyboardType(keyboard)
-                .padding(12)
-                .background(Color(.systemBackground))
-                .cornerRadius(12)
+            Text(label).font(.caption).fontWeight(.medium).foregroundColor(.secondary)
+            TextField(placeholder, text: text).keyboardType(keyboard)
+                .padding(12).background(Color(.systemBackground)).cornerRadius(12)
+        }
+    }
+
+    // MARK: - Barcode lookup
+
+    private func lookupBarcode(_ code: String) async {
+        isFetchingBarcode = true
+        barcodeError      = nil
+        defer { isFetchingBarcode = false }
+
+        do {
+            let product = try await OpenFoodFactsService.shared.fetchProduct(barcode: code)
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
+                scannedProduct = FoodDatabaseItem(
+                    name:            product.name,
+                    emoji:           "🔍",
+                    caloriesPer100g: product.caloriesPer100g,
+                    proteinPer100g:  product.proteinPer100g,
+                    fatPer100g:      product.fatPer100g,
+                    carbsPer100g:    product.carbsPer100g
+                )
+            }
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
+        } catch {
+            barcodeError = error.localizedDescription
+            UINotificationFeedbackGenerator().notificationOccurred(.error)
         }
     }
 
@@ -332,14 +411,14 @@ struct AddFoodView: View {
         entry.date     = date
         entry.mealType = mealType
 
-        if useCustom {
+        if mode == .custom {
             entry.name     = customName
             entry.calories = Double(customCalories) ?? 0
             entry.protein  = Double(customProtein)  ?? 0
             entry.fat      = Double(customFat)      ?? 0
             entry.carbs    = Double(customCarbs)    ?? 0
             entry.weight   = 100
-        } else if let food = selectedFood {
+        } else if let food = activeFood {
             entry.name     = food.name
             entry.calories = computedCalories
             entry.protein  = computedProtein
